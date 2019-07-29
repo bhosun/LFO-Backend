@@ -1,3 +1,4 @@
+import '@babel/polyfill';
 import express from "express";
 import bodyParser from "body-parser";
 import helmet from "helmet";
@@ -8,6 +9,7 @@ import listEndpoints from "express-list-endpoints";
 import initializeDbConnection from "./util/db";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { debugLogger, prettyStringify } from "./util/logger/index";
 
 //Models
 import admins from "./models/admins";
@@ -24,8 +26,8 @@ const db = initializeDbConnection({ Sequelize, dotenv });
 db.sync()
 	.then(() => {
 		console.log("DB Connection has been established");
-        app.listen(PORT);
-        console.log('App Running on PORT', PORT);
+		app.listen(PORT);
+		console.log("App Running on PORT", PORT);
 	})
 	.catch(err => {
 		console.error("Failed To connect to Database", err);
@@ -43,6 +45,9 @@ app.use(bodyParser.json());
 
 // Enable CORS
 app.use((req, res, next) => {
+	debugLogger(`Request body: ${prettyStringify(req.body)}`);
+	debugLogger(`Request params: ${prettyStringify(req.params)}`);
+	debugLogger(`Request headers: ${prettyStringify(req.headers)}`);
 	res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE");
 	res.header("Access-Control-Allow-Origin", "*");
 	res.header(
@@ -55,7 +60,10 @@ app.use((req, res, next) => {
 	);
 	next();
 });
-app.use(`${URL_PREFIX}/auth`, authRouter({ express, AdminModel: adminModel, jwt, bcrypt }));
+app.use(
+	`${URL_PREFIX}/auth`,
+	authRouter({ express, AdminModel: adminModel, jwt, bcrypt })
+);
 
 app.use(`${URL_PREFIX}/endpoints`, (req, res) =>
 	res.status(200).json(listEndpoints(app))
