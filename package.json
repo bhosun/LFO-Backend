@@ -1,0 +1,54 @@
+{
+  "name": "LFO-Backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/index.js --exec babel-node --presets @babel/preset-env",
+    "build": "babel src --out-dir build",
+    "prebuild": "npm run clean; npm run preetier",
+    "clean": "rm -rf build/*",
+    "pretest": "eslint --ignore-path .gitignore src/ --fix",
+    "preetier": "prettier --single-quote --trailing-comma es5 --print-width 80 --write --no-bracket-spacing src/**/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/timzprof/LFO-Backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/timzprof/LFO-Backend/issues"
+  },
+  "homepage": "https://github.com/timzprof/LFO-Backend#readme",
+  "dependencies": {
+    "@babel/polyfill": "^7.4.4",
+    "bcrypt": "^3.0.6",
+    "body-parser": "^1.19.0",
+    "compression": "^1.7.4",
+    "dotenv": "^8.0.0",
+    "express": "^4.17.1",
+    "express-list-endpoints": "^4.0.1",
+    "helmet": "^3.20.0",
+    "joi": "^14.3.1",
+    "jsonwebtoken": "^8.5.1",
+    "pg": "^7.12.0",
+    "pg-hstore": "^2.3.3",
+    "pm2": "^3.5.1",
+    "sequelize": "^5.11.0",
+    "trim-request": "^1.0.6",
+    "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/node": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb": "^17.1.1",
+    "eslint-config-prettier": "^6.0.0",
+    "nodemon": "^1.19.1",
+    "prettier": "^1.18.2"
+  }
+}
