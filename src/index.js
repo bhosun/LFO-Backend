@@ -13,9 +13,14 @@ import { debugLogger, prettyStringify } from "./util/logger/index";
 
 //Models
 import admins from "./models/admins";
+import children from './models/children';
+import visitors from './models/visitor';
 
 //Routes
 import authRouter from "./routes/auth";
+import donateRoutes from './routes/donate';
+import childrenRoutes from './routes/children';
+import visitorRoutes from './routes/visitor';
 
 const URL_PREFIX = "/api/v1";
 const PORT = 7000;
@@ -34,6 +39,16 @@ db.sync()
 	});
 
 const adminModel = admins({
+	Sequelize,
+	db
+});
+
+const childrenModel = children({
+	Sequelize,
+	db
+});
+
+const visitorModel = visitors({
 	Sequelize,
 	db
 });
@@ -60,11 +75,48 @@ app.use((req, res, next) => {
 	);
 	next();
 });
+
+// Landing Page
+app.get(`${URL_PREFIX}/`, (req, res) => {
+	res.status(200).json({
+		status: "Success",
+		message: "Welcome to the living foundation Orphanage Home"
+	});
+});
+
+// Contact Page
+app.get(`${URL_PREFIX}/contact`, (req, res) => {
+	res.status(200).json({
+		status: "success",
+		message: "welcome to the contact page get other details of the Orpahange here!!"
+	});
+});
+
+// Donations Page
+app.use(
+	`${URL_PREFIX}/donate`,
+	donateRoutes({ express })
+);
+
+// Children Page
+app.use(
+	`${URL_PREFIX}/children`,
+	childrenRoutes({ express, ChildrenModel: childrenModel })
+);
+
+// Visitors Page
+app.use(
+	`${URL_PREFIX}/visitors`,
+	visitorRoutes({ express, VisitorModel: visitorModel })
+);
+
+// Authentication Route
 app.use(
 	`${URL_PREFIX}/auth`,
 	authRouter({ express, AdminModel: adminModel, jwt, bcrypt })
 );
 
+// General Endpoints
 app.use(`${URL_PREFIX}/endpoints`, (req, res) =>
 	res.status(200).json(listEndpoints(app))
 );

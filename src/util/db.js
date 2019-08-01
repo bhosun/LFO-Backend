@@ -1,7 +1,11 @@
-export default ({ Sequelize, dotenv }) => {
-	dotenv.config();
+// require('dotenv').config()
 
-	const sequelize = new Sequelize(process.env.DATABASE_URL, {
+export default ({ Sequelize, dotenv }) => {
+	// require('dotenv').config();
+
+	const sequelize = new Sequelize('lfo', 'postgres', 'bosunbosun71', {
+		host: 'localhost',
+		dialect: 'postgres',
 		logging: false
     });
     
